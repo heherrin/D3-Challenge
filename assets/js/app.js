@@ -27,3 +27,10 @@ var svg = d3.select("#scatter")
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
 
+  // Load data from journalism data csv
+  d3.csv("assets/data/data.csv").then(function(journalismData) {
+
+    // Print the tvData
+    console.log(journalismData);
+  })
+  
