@@ -44,14 +44,47 @@ d3.csv("assets/data/data.csv").then(function (journalismData) {
 
         //creating scaling
         var xScale = d3.scaleLinear()
-            .domain([0, d3.max(journalismData, d => d.income)])
+            .domain([35000, d3.max(journalismData, d => d.income)])
             .range([0, chartWidth]);
 
         var yScale = d3.scaleLinear()
-            .domain([0, d3.max(journalismData, d => d.smokes)])
+            .domain([2, d3.max(journalismData, d => d.smokes)])
             .range([chartHeight, 0])
 
+        //create axis -day 2 activity 5
+        var yAxis = d3.axisLeft(yScale);
+        var xAxis = d3.axisBottom(xScale);
 
+        // set x to the bottom of the chart 
+        chartGroup.append("g")
+            .attr("transform", `translate(0, ${chartHeight})`)
+            .call(xAxis);
+
+        // set y to the y axis
+        chartGroup.append("g")
+            .call(yAxis);
+
+        // create data format for circles
+        var dataPoints = chartGroup.selectAll("circle")
+            .data(journalismData)
+            .enter()
+            .append("circle")
+            .attr("cx", d => xScale(d.income))
+            .attr("cy", d => yScale(d.smokes))
+            .attr("r", "12")
+            .attr("fill", "orange")
+            .attr("opacity", ".3");
+
+        // add labels inside circles
+        var data_labels = chartGroup.selectAll("none")
+            .data(journalismData)
+            .enter()
+            .append("text")
+            .text(d => d.abbr)
+            .attr("fill", "black")
+            .attr("font-size", "10px")
+            .attr("x", d => xScale(d.income))
+            .attr("y", d => yScale(d.smokes));
 
     });
 })
