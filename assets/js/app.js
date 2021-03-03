@@ -1,8 +1,8 @@
 // set svg and dimensions of chart
 
 //Set variable for height and width for calculation
-var svgWidth = 900;
-var svgHeight = 500;
+var svgWidth = 800;
+var svgHeight = 400;
 
 //set chart margins
 var chartMargin = {
@@ -65,26 +65,37 @@ d3.csv("assets/data/data.csv").then(function (journalismData) {
             .call(yAxis);
 
         // create data format for circles
-        var dataPoints = chartGroup.selectAll("circle")
-            .data(journalismData)
-            .enter()
+        var circle = svg.selectAll("g circle").data(journalismData).enter();
+
+        circle
             .append("circle")
             .attr("cx", d => xScale(d.income))
             .attr("cy", d => yScale(d.smokes))
-            .attr("r", "12")
+            .attr("r", "15")
             .attr("fill", "orange")
-            .attr("opacity", ".3");
+            .attr("opacity", ".3")
 
-        // add labels inside circles
-        var data_labels = chartGroup.selectAll("none")
-            .data(journalismData)
-            .enter()
+        circle
             .append("text")
             .text(d => d.abbr)
             .attr("fill", "black")
             .attr("font-size", "10px")
             .attr("x", d => xScale(d.income))
             .attr("y", d => yScale(d.smokes));
+
+        // Axis labels
+        chartGroup.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - chartMargin.left + 1)
+            .attr("x", 0 - (svgHeight / 2))
+            .attr("dy", "1em")
+            .attr("class", "axisText")
+            .text("Smoking");
+
+        chartGroup.append("text")
+            .attr("transform", `translate(${svgWidth / 2}, ${svgHeight + chartMargin.top + 30})`)
+            .attr("class", "axisText")
+            .text("Household Income");
 
     });
 })
